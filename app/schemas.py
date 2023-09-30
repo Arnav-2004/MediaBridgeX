@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic.types import conint
 from datetime import datetime
 
@@ -15,12 +15,11 @@ class LoginUser(BaseModel):
 
 
 class User(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     email: EmailStr
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class BasePost(BaseModel):
@@ -34,13 +33,12 @@ class CreatePost(BasePost):
 
 
 class Post(BasePost):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     created_at: datetime
     owner_id: int
     owner: User
-
-    class Config:
-        from_attributes = True
 
 
 class Token(BaseModel):
@@ -58,8 +56,7 @@ class Like(BaseModel):
 
 
 class PostLike(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     Post: Post
     likes: int
-
-    class Config:
-        from_attributes = True
