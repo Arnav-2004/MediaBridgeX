@@ -1,12 +1,13 @@
 from datetime import datetime
-from typing_extensions import Annotated
 from typing import List
-from sqlalchemy import Boolean, String, ForeignKey
-from sqlalchemy.orm import relationship, mapped_column, Mapped
+
+from sqlalchemy import Boolean, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from .database import Base
+from typing_extensions import Annotated
 
+from .database import Base
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 users_fk = Annotated[int, mapped_column(ForeignKey("users.id", ondelete="cascade"))]
