@@ -27,12 +27,17 @@ def test_get_one_post_id_not_found(client):
     assert res.status_code == 404
 
 
-@pytest.mark.parametrize("title, content, published", [
-    ("first test title", "first test content", True),
-    ("second test title", "second test content", False)
-])
+@pytest.mark.parametrize(
+    "title, content, published",
+    [
+        ("first test title", "first test content", True),
+        ("second test title", "second test content", False),
+    ],
+)
 def test_create_posts(authorized_client, test_user, title, content, published):
-    res = authorized_client.post("/posts/", json={"title": title, "content": content, "published": published})
+    res = authorized_client.post(
+        "/posts/", json={"title": title, "content": content, "published": published}
+    )
     created_post = schemas.Post(**res.json())
     assert res.status_code == 201
     assert created_post.title == title
@@ -42,7 +47,9 @@ def test_create_posts(authorized_client, test_user, title, content, published):
 
 
 def test_create_posts_default_published(authorized_client, test_user):
-    res = authorized_client.post("/posts/", json={"title": "test title", "content": "test content"})
+    res = authorized_client.post(
+        "/posts/", json={"title": "test title", "content": "test content"}
+    )
     created_post = schemas.Post(**res.json())
     assert res.status_code == 201
     assert created_post.title == "test title"
@@ -52,7 +59,9 @@ def test_create_posts_default_published(authorized_client, test_user):
 
 
 def test_create_posts_unauthorized(client):
-    res = client.post("/posts/", json={"title": "test title", "content": "test content"})
+    res = client.post(
+        "/posts/", json={"title": "test title", "content": "test content"}
+    )
     assert res.status_code == 401
 
 
@@ -77,7 +86,10 @@ def test_delete_posts_unauthorized(client, test_posts):
 
 
 def test_update_posts(authorized_client, test_posts):
-    res = authorized_client.put(f"/posts/{test_posts[0].id}", json={"title": "updated title", "content": "updated content"})
+    res = authorized_client.put(
+        f"/posts/{test_posts[0].id}",
+        json={"title": "updated title", "content": "updated content"},
+    )
     updated_post = schemas.Post(**res.json())
     assert res.status_code == 200
     assert updated_post.title == "updated title"
@@ -85,15 +97,23 @@ def test_update_posts(authorized_client, test_posts):
 
 
 def test_update_posts_id_not_found(authorized_client):
-    res = authorized_client.put("/posts/1000000", json={"title": "updated title", "content": "updated content"})
+    res = authorized_client.put(
+        "/posts/1000000", json={"title": "updated title", "content": "updated content"}
+    )
     assert res.status_code == 404
 
 
 def test_update_posts_different_owner(authorized_client, test_posts):
-    res = authorized_client.put(f"/posts/{test_posts[2].id}", json={"title": "updated title", "content": "updated content"})
+    res = authorized_client.put(
+        f"/posts/{test_posts[2].id}",
+        json={"title": "updated title", "content": "updated content"},
+    )
     assert res.status_code == 403
 
 
 def test_update_posts_unauthorized(client, test_posts):
-    res = client.put(f"/posts/{test_posts[0].id}", json={"title": "updated title", "content": "updated content"})
+    res = client.put(
+        f"/posts/{test_posts[0].id}",
+        json={"title": "updated title", "content": "updated content"},
+    )
     assert res.status_code == 401

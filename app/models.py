@@ -10,8 +10,12 @@ from .database import Base
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 users_fk = Annotated[int, mapped_column(ForeignKey("users.id", ondelete="cascade"))]
-users_pk_fk = Annotated[int, mapped_column(ForeignKey("users.id", ondelete="cascade"), primary_key=True)]
-posts_pk_fk = Annotated[int, mapped_column(ForeignKey("posts.id", ondelete="cascade"), primary_key=True)]
+users_pk_fk = Annotated[
+    int, mapped_column(ForeignKey("users.id", ondelete="cascade"), primary_key=True)
+]
+posts_pk_fk = Annotated[
+    int, mapped_column(ForeignKey("posts.id", ondelete="cascade"), primary_key=True)
+]
 
 
 class Post(Base):
@@ -20,8 +24,10 @@ class Post(Base):
     id: Mapped[intpk]
     title: Mapped[str] = mapped_column(String(300))
     content: Mapped[str] = mapped_column(String(3000))
-    published: Mapped[bool] = mapped_column(Boolean, server_default='1')
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(True), server_default=text("now()"))
+    published: Mapped[bool] = mapped_column(Boolean, server_default="1")
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(True), server_default=text("now()")
+    )
     owner_id: Mapped[users_fk]
     owner: Mapped[List["User"]] = relationship("User")
 
@@ -32,7 +38,9 @@ class User(Base):
     id: Mapped[intpk]
     email: Mapped[str] = mapped_column(String(320), unique=True)
     password: Mapped[str] = mapped_column(String(256))
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(True), server_default=text("now()"))
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(True), server_default=text("now()")
+    )
 
 
 class Like(Base):

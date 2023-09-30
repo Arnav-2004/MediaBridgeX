@@ -30,11 +30,11 @@ def session():
 @pytest.fixture
 def client(session):
     def override_get_db():
-
         try:
             yield session
         finally:
             session.close()
+
     app.dependency_overrides[get_db] = override_get_db
     yield TestClient(app)
 
@@ -72,7 +72,28 @@ def authorized_client(client, token):
 
 @pytest.fixture
 def test_posts(test_user, test_user2, session):
-    posts_data = [{"title": "this is my first post", "content": "content of my first post", "owner_id": test_user['id']}, {"title": "this is my second post", "content": "content of my second post", "owner_id": test_user['id']}, {"title": "this is my first post", "content": "content of my first post", "owner_id": test_user2['id']}, {"title": "this is my third post", "content": "content of my third post", "owner_id": test_user['id']}]
+    posts_data = [
+        {
+            "title": "this is my first post",
+            "content": "content of my first post",
+            "owner_id": test_user["id"],
+        },
+        {
+            "title": "this is my second post",
+            "content": "content of my second post",
+            "owner_id": test_user["id"],
+        },
+        {
+            "title": "this is my first post",
+            "content": "content of my first post",
+            "owner_id": test_user2["id"],
+        },
+        {
+            "title": "this is my third post",
+            "content": "content of my third post",
+            "owner_id": test_user["id"],
+        },
+    ]
     posts = list(map(lambda post: models.Post(**post), posts_data))
     session.add_all(posts)
     session.commit()
